@@ -1,0 +1,53 @@
+[modules.welcome]
+channel.name = "Channel"
+channel.description = "The channel where welcome messages are sent."
+content.name = "Content"
+content.description = "The content of the message, sent alongside the embed. Can be empty."
+embed.name = "Embed"
+embed.description = "An embed that is sent alongside the message content."
+
+[modules.lock]
+locked.name = "Locked Message"
+locked.description = "The message sent when the channel is locked."
+unlockedEmbed.name = "Unlocked message"
+unlockedEmbed.description = "The message sent when the channel is unlocked."
+
+[modules.roleplay]
+channels.name = "Channels"
+channels.description = "An exclusive list of channels where the roleplay feature can be used. Leave empty to allow use in all channels."
+
+[modules.partnerships]
+profiles.name = "Profiles"
+profiles.description = "A list of profiles for each 'type' of partnership (partnerships, siblings, affiliates, etc.)"
+
+[modules.partnershipsprofile]
+channel.name = "Channel"
+channel.description = "The channel where partnership messages are sent."
+name.name = "Name"
+name.description = "The name of this profile."
+trigger.name = "Trigger"
+trigger.description = "The trigger for this profile. (ex. `@Partners Ping` to trigger a partnership, `@everyone` for siblings, etc.)"
+message.name = "Message"
+message.description = "The message sent when a partnership is made."
+
+[modules.verification]
+code.name = "Code"
+code.description = "The password people must enter to verify."
+message.name = "Message"
+message.description = "The message sent for people to verify with."
+verifiedMessage.name = "Verified Message"
+verifiedMessage.description = "The message sent when you have successfully verified."
+wrongCodeMessage.name = "Wrong Code Message"
+wrongCodeMessage.description = "The message sent when you input the wrong password."
+beforeRoles.name = "Pre Roles"
+beforeRoles.description = "Roles received before verification."
+afterRoles.name = "Post Roles"
+afterRoles.description = "Roles received after verification. The pre roles will be removed."
+channel.name = "Verification Channel"
+channel.description = "Choose a channel to send the verification message in."
+
+[modules.messageconfig]
+content.name = "Content"
+content.description = "The content of the message."
+embed.name = "Embed"
+embed.description = "An embed sent alongside the message content."
