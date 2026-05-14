@@ -1,4 +1,4 @@
-@file:Feature("Settings", "Configure Northstar's settings.", toggleable = true)
+@file:Feature("Settings", "Configure Northstar's settings.")
 @file:Suppress("UNCHECKED_CAST")
 
 package dev.rosalyn.northstar.feature
