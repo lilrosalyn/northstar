@@ -1,4 +1,4 @@
-@file:Feature("Settings", "Configure Northstar's settings.")
+@file:Feature("Settings", "Configure Northstar's settings.", toggleable = true)
 @file:Suppress("UNCHECKED_CAST")
 
 package dev.rosalyn.northstar.feature
@@ -363,6 +363,29 @@ private fun generateProperties(
                                         property::set.call(settings, newValue)
                                         editComponents(
                                             makeTextDisplay("Done! The channel is now ${newValue.asMention}."),
+                                            message.components[1]
+                                        ).useComponentsV2().queue()
+                                        editGuild(guildData)
+                                    }
+                                }
+                            ).useComponentsV2().setEphemeral(true).queue()
+                        }
+                        Role::class -> {
+                            value as Role?
+
+                            replyComponents(
+                                makeTextDisplay("Select a new role."),
+                                makeActionRow {
+                                    entitySelect(
+                                        SelectTarget.ROLE,
+                                        defaultValues = value?.let { listOf(EntitySelectMenu.DefaultValue.role(it.idLong)) }
+                                            ?: emptyList(),
+                                        requiredRange = 1..1
+                                    ) {
+                                        val newValue = values[0] as Role
+                                        property::set.call(settings, newValue)
+                                        editComponents(
+                                            makeTextDisplay("Done! The role is now ${newValue.asMention}."),
                                             message.components[1]
                                         ).useComponentsV2().queue()
                                         editGuild(guildData)

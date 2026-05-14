@@ -7,10 +7,12 @@ embed.name = "Embed"
 embed.description = "An embed that is sent alongside the message content."
 
 [modules.lock]
+role.name = "Role"
+role.description = "The role which is prevented from using the channel (usually a member role.)"
 locked.name = "Locked Message"
 locked.description = "The message sent when the channel is locked."
-unlockedEmbed.name = "Unlocked message"
-unlockedEmbed.description = "The message sent when the channel is unlocked."
+unlocked.name = "Unlocked Message"
+unlocked.description = "The message sent when the channel is unlocked."
 
 [modules.roleplay]
 channels.name = "Channels"

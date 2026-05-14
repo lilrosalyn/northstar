@@ -1,4 +1,4 @@
-@file:Feature("Lock", "Lock channels.", toggleable = false)
+@file:Feature("Lock", "Lock channels.", toggleable = true)
 
 package dev.rosalyn.northstar.feature
 
