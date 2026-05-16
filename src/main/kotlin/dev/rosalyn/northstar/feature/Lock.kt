@@ -1,4 +1,4 @@
-@file:Feature("Lock", "Lock channels.", toggleable = true)
+@file:Feature("Lock", "Lock channels.")
 
 package dev.rosalyn.northstar.feature
 
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 
 @Serializable
 data class Lock(
-    override var enabled: Boolean = false,
+    override var enabled: Boolean,
     var role: SerializableRole? = null,
     var locked: MessageConfig? = null,
     var unlocked: MessageConfig? = null

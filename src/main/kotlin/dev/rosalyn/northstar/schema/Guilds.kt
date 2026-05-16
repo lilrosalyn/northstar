@@ -1,5 +1,6 @@
 package dev.rosalyn.northstar.schema
 
+import dev.rosalyn.northstar.feature.AutoRoles
 import dev.rosalyn.northstar.feature.Lock
 import dev.rosalyn.northstar.feature.Partnerships
 import dev.rosalyn.northstar.feature.Roleplay
@@ -41,7 +42,8 @@ data class Guild(
         @SerialName("PartnershipsKt") val partnerships: Partnerships = Partnerships(false),
         @SerialName("RoleplayKt") val roleplay: Roleplay = Roleplay(false),
         @SerialName("WelcomeKt") val welcome: Welcome = Welcome(false),
-        @SerialName("VerificationKt") val verification: Verification = Verification(false)
+        @SerialName("VerificationKt") val verification: Verification = Verification(false),
+        @SerialName("AutoRolesKt") val autoRoles: AutoRoles = AutoRoles(false)
     )
 
     constructor(resultRow: ResultRow) : this(

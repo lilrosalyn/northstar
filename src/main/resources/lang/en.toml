@@ -53,3 +53,7 @@ content.name = "Content"
 content.description = "The content of the message."
 embed.name = "Embed"
 embed.description = "An embed sent alongside the message content."
+
+[modules.autoroles]
+roles.name = "Roles"
+roles.description = "A list of roles that will be given to a new member when they join the server."

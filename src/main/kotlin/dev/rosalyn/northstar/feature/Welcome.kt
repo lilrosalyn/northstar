@@ -1,4 +1,4 @@
-@file:Feature("Welcome", "Embrace new users with a welcome message.", toggleable = true)
+@file:Feature("Welcome", "Embrace new users with a welcome message.")
 
 package dev.rosalyn.northstar.feature
 
@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData
 
 @Serializable
 data class Welcome(
-    override var enabled: Boolean = false,
+    override var enabled: Boolean,
     var channel: SerializableChannel? = null,
     var message: MessageConfig? = null
 ) : ModuleSettings {

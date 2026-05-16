@@ -1,4 +1,4 @@
-@file:Feature("Roleplay", "Roleplay as a character in chat.", toggleable = true)
+@file:Feature("Roleplay", "Roleplay as a character in chat.")
 
 package dev.rosalyn.northstar.feature
 
@@ -49,7 +49,7 @@ import java.net.URI
 
 @Serializable
 data class Roleplay(
-    override var enabled: Boolean = false,
+    override var enabled: Boolean,
     var channels: MutableList<SerializableChannel> = mutableListOf()
 ) : ModuleSettings
 

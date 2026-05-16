@@ -29,7 +29,7 @@ import kotlin.reflect.jvm.isAccessible
 annotation class Feature(
     val name: String,
     val description: String,
-    val toggleable: Boolean = false,
+    val toggleable: Boolean = true,
     val customModule: Boolean = false
 )
 

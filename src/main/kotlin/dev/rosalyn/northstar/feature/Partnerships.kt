@@ -1,4 +1,4 @@
-@file:Feature("Partnerships", "Manage partnerships.", toggleable = true)
+@file:Feature("Partnerships", "Manage partnerships.")
 
 package dev.rosalyn.northstar.feature
 
