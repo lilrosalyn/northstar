@@ -40,7 +40,7 @@ data class PartnershipsProfile(
 
 @Serializable
 data class Partnerships(
-    override var enabled: Boolean,
+    override var enabled: Boolean = false,
     var profiles: MutableList<PartnershipsProfile> = mutableListOf()
 ) : ModuleSettings
 

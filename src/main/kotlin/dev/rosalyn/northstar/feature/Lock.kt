@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 
 @Serializable
 data class Lock(
-    override var enabled: Boolean,
+    override var enabled: Boolean = false,
     var role: SerializableRole? = null,
     var locked: MessageConfig? = null,
     var unlocked: MessageConfig? = null

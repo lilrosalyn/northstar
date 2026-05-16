@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.interactions.Interaction
 
 @Serializable
 data class Verification(
-    override var enabled: Boolean,
+    override var enabled: Boolean = false,
     var code: String? = null,
     var message: MessageConfig? = null,
     var verifiedMessage: MessageConfig? = MessageConfig("You have successfully verified."),

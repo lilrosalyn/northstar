@@ -49,7 +49,7 @@ import java.net.URI
 
 @Serializable
 data class Roleplay(
-    override var enabled: Boolean,
+    override var enabled: Boolean = false,
     var channels: MutableList<SerializableChannel> = mutableListOf()
 ) : ModuleSettings
 

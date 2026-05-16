@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 
 @Serializable
 data class AutoRoles(
-    override var enabled: Boolean,
+    override var enabled: Boolean = false,
     var roles: MutableList<SerializableRole> = mutableListOf()
 ) : ModuleSettings
 

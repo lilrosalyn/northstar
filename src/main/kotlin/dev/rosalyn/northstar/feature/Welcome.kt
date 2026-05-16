@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData
 
 @Serializable
 data class Welcome(
-    override var enabled: Boolean,
+    override var enabled: Boolean = false,
     var channel: SerializableChannel? = null,
     var message: MessageConfig? = null
 ) : ModuleSettings {
