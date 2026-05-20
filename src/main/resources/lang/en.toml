@@ -1,10 +1,8 @@
 [modules.welcome]
 channel.name = "Channel"
 channel.description = "The channel where welcome messages are sent."
-content.name = "Content"
-content.description = "The content of the message, sent alongside the embed. Can be empty."
-embed.name = "Embed"
-embed.description = "An embed that is sent alongside the message content."
+message.name = "Message"
+message.description = "The message sent when a member joins the server."
 
 [modules.lock]
 role.name = "Role"
@@ -57,3 +55,11 @@ embed.description = "An embed sent alongside the message content."
 [modules.autoroles]
 roles.name = "Roles"
 roles.description = "A list of roles that will be given to a new member when they join the server."
+
+[modules.reactionroles]
+channel.name = "Channel"
+channel.description = "Choose a channel to send the role list in."
+message.name = "Message"
+message.description = "A message sent alongside the role list."
+roles.name = "Roles"
+roles.description = "A list of roles that people can assign themselves."
