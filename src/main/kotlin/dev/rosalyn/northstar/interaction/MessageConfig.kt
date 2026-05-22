@@ -11,11 +11,15 @@ data class MessageConfig(
 ) {
     fun isValidForUse() = content != null || embed != null
 
-    fun toMessage(vararg placeholders: Pair<String, String>): MessageCreateData {
-        val builder = MessageCreateBuilder()
-            .setContent(content)
+    fun toMessage(
+        vararg placeholders: Pair<String, String>
+    ) = toMessage(mapOf(*placeholders))
 
-        val embed = embed?.toEmbed(*placeholders)
+    fun toMessage(placeholderMap: Map<String, String>): MessageCreateData {
+        val builder = MessageCreateBuilder()
+            .setContent(content?.let { processMessage(it, placeholderMap) })
+
+        val embed = embed?.toEmbed(placeholderMap)
         embed?.let { builder.addEmbeds(it) }
         return builder.build()
     }

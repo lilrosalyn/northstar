@@ -23,9 +23,11 @@ data class EmbedConfig(
 
     fun toEmbed(
         vararg placeholders: Pair<String, String>
-    ): MessageEmbed? {
-        val placeholderMap = mapOf(*placeholders)
+    ) = toEmbed(mapOf(*placeholders))
 
+    fun toEmbed(
+        placeholderMap: Map<String, String>
+    ): MessageEmbed? {
         val builder = EmbedBuilder()
         color?.let { builder.setColor(Color.decode(it)) }
         title?.let { builder.setTitle(processMessage(it, placeholderMap)) }
