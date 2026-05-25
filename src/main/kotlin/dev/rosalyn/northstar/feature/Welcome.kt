@@ -6,9 +6,7 @@ import dev.rosalyn.northstar.ModuleSettings
 import dev.rosalyn.northstar.SerializableChannel
 import dev.rosalyn.northstar.event.GuildCleanupEvent
 import dev.rosalyn.northstar.event.GuildInitializeEvent
-import dev.rosalyn.northstar.interaction.EmbedConfig
-import dev.rosalyn.northstar.interaction.MessageConfig
-import dev.rosalyn.northstar.interaction.processMessage
+import dev.rosalyn.northstar.config.MessageConfig
 import dev.rosalyn.northstar.lib.calculateAge
 import dev.rosalyn.northstar.schema.getGuild
 import kotlinx.serialization.Serializable
@@ -16,7 +14,6 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -24,7 +21,6 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.Commands
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import net.dv8tion.jda.api.utils.messages.MessageCreateData
 
 @Serializable

@@ -5,8 +5,7 @@ package dev.rosalyn.northstar.feature
 import dev.rosalyn.northstar.ModuleSettings
 import dev.rosalyn.northstar.SerializableRole
 import dev.rosalyn.northstar.event.GuildInitializeEvent
-import dev.rosalyn.northstar.interaction.EmbedConfig
-import dev.rosalyn.northstar.interaction.MessageConfig
+import dev.rosalyn.northstar.config.MessageConfig
 import dev.rosalyn.northstar.schema.getGuild
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.Permission

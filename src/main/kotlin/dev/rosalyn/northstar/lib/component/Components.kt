@@ -1,4 +1,4 @@
-package dev.rosalyn.northstar.interaction
+package dev.rosalyn.northstar.lib.component
 
 import dev.rosalyn.northstar.logger
 import net.dv8tion.jda.api.components.ModalTopLevelComponent

@@ -4,10 +4,10 @@ package dev.rosalyn.northstar.feature
 
 import dev.rosalyn.northstar.ModuleSettings
 import dev.rosalyn.northstar.SerializableRole
-import dev.rosalyn.northstar.interaction.ContainerBuilder
-import dev.rosalyn.northstar.interaction.MessageConfig
-import dev.rosalyn.northstar.interaction.makeActionRow
-import dev.rosalyn.northstar.interaction.makeTextDisplay
+import dev.rosalyn.northstar.lib.component.ContainerBuilder
+import dev.rosalyn.northstar.config.MessageConfig
+import dev.rosalyn.northstar.lib.component.makeActionRow
+import dev.rosalyn.northstar.lib.component.makeTextDisplay
 import dev.rosalyn.northstar.language.translate
 import dev.rosalyn.northstar.schema.getGuild
 import kotlinx.serialization.Serializable
@@ -16,7 +16,6 @@ import net.dv8tion.jda.api.components.buttons.Button
 import net.dv8tion.jda.api.components.buttons.ButtonStyle
 import net.dv8tion.jda.api.components.selections.EntitySelectMenu
 import net.dv8tion.jda.api.components.selections.SelectOption
-import net.dv8tion.jda.api.components.selections.StringSelectMenu
 import net.dv8tion.jda.api.entities.channel.ChannelType
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import net.dv8tion.jda.api.entities.Role

@@ -1,4 +1,4 @@
-package dev.rosalyn.northstar.interaction
+package dev.rosalyn.northstar.language
 
 fun processMessage(input: String, placeholders: Map<String, String>): String {
     val parsedPlaceholder = StringBuilder()

@@ -8,24 +8,17 @@ import dev.rosalyn.northstar.event.GuildInitializeEvent
 import dev.rosalyn.northstar.feature.FeatureBase
 import dev.rosalyn.northstar.feature.FeatureInitializer
 import dev.rosalyn.northstar.feature.FeatureInteractionType
-import dev.rosalyn.northstar.interaction.MessageConfig
-import dev.rosalyn.northstar.interaction.cleanupOldHandlers
+import dev.rosalyn.northstar.lib.component.cleanupOldHandlers
 import dev.rosalyn.northstar.language.loadLocales
-import dev.rosalyn.northstar.schema.editGuild
-import dev.rosalyn.northstar.schema.editMember
-import dev.rosalyn.northstar.schema.getGuild
-import dev.rosalyn.northstar.schema.getMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
-import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import kotlin.io.path.Path
 import kotlin.reflect.jvm.isAccessible
 
 val logger: Logger = LoggerFactory.getLogger("Northstar")

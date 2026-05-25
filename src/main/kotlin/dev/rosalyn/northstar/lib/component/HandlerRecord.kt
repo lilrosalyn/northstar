@@ -1,7 +1,8 @@
-package dev.rosalyn.northstar.interaction
+package dev.rosalyn.northstar.lib.component
 
 import kotlinx.coroutines.delay
 import java.util.UUID
+import kotlin.collections.iterator
 import kotlin.time.Clock
 
 private const val expiryPeriod = 60 * 30

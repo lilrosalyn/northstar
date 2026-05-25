@@ -1,5 +1,6 @@
-package dev.rosalyn.northstar.interaction
+package dev.rosalyn.northstar.config
 
+import dev.rosalyn.northstar.language.processMessage
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import net.dv8tion.jda.api.utils.messages.MessageCreateData

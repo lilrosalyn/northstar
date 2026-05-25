@@ -6,9 +6,8 @@ import dev.rosalyn.commando.common.node.Node
 import dev.rosalyn.commando.common.parser.InteractionType
 import dev.rosalyn.commando.common.parser.handle.FunctionHandle
 import dev.rosalyn.northstar.ModuleSettings
-import dev.rosalyn.northstar.interaction.ContainerBuilder
+import dev.rosalyn.northstar.lib.component.ContainerBuilder
 import dev.rosalyn.northstar.lib.handleError
-import dev.rosalyn.northstar.logger
 import dev.rosalyn.northstar.scope
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
@@ -23,8 +22,6 @@ import kotlin.reflect.KTypeProjection
 import kotlin.reflect.KVariance
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.createType
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.staticProperties
 import kotlin.reflect.jvm.isAccessible
 
 @Target(AnnotationTarget.FILE)

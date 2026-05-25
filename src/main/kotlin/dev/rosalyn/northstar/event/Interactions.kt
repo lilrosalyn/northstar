@@ -2,12 +2,9 @@
 
 package dev.rosalyn.northstar.event
 
-import dev.rosalyn.northstar.interaction.handlerRecord
+import dev.rosalyn.northstar.lib.component.handlerRecord
 import dev.rosalyn.northstar.lib.handleError
-import dev.rosalyn.northstar.logger
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent
 import net.dv8tion.jda.api.interactions.ICustomIdInteraction
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
 import java.util.*
