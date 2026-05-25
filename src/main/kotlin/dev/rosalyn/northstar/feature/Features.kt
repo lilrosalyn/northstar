@@ -7,6 +7,8 @@ import dev.rosalyn.commando.common.parser.InteractionType
 import dev.rosalyn.commando.common.parser.handle.FunctionHandle
 import dev.rosalyn.northstar.ModuleSettings
 import dev.rosalyn.northstar.interaction.ContainerBuilder
+import dev.rosalyn.northstar.lib.handleError
+import dev.rosalyn.northstar.logger
 import dev.rosalyn.northstar.scope
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
@@ -70,9 +72,19 @@ class FeatureEvent<C>(
         if (this.event.java.isAssignableFrom(event::class.java)) {
             function.isAccessible = true
 
-            if (function.isSuspend)
-                scope.launch { function.callSuspend(event) }
-            else function.call(event)
+            try {
+                if (function.isSuspend)
+                    scope.launch {
+                        try {
+                            function.callSuspend(event)
+                        } catch (exception: Exception) {
+                            handleError(event, exception)
+                        }
+                    }
+                else function.call(event)
+            } catch (exception: Exception) {
+                handleError(event, exception)
+            }
         }
     }
 }
