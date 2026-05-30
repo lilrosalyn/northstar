@@ -5,15 +5,24 @@ package dev.rosalyn.northstar.feature
 import dev.rosalyn.northstar.ModuleSettings
 import dev.rosalyn.northstar.SerializableChannel
 import dev.rosalyn.northstar.config.MessageConfig
+import dev.rosalyn.northstar.event.GuildInitializeEvent
 import dev.rosalyn.northstar.jda
 import dev.rosalyn.northstar.lib.calculateAge
 import dev.rosalyn.northstar.schema.editMember
 import dev.rosalyn.northstar.schema.getGuild
 import dev.rosalyn.northstar.schema.getMember
 import kotlinx.serialization.Serializable
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Invite
 import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.commands.Command
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
+import net.dv8tion.jda.api.interactions.commands.OptionType
+import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import net.dv8tion.jda.api.interactions.commands.build.Commands
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import net.dv8tion.jda.api.utils.messages.MessageCreateData
 
 @Serializable
@@ -31,6 +40,37 @@ data class Partnerships(
 ) : ModuleSettings
 
 private val moduleConfig = Partnerships::class
+
+private fun initializeModule(event: GuildInitializeEvent): List<CommandData> {
+    return listOf(
+        Commands.slash("partnerships", "Manage partnerships.")
+            .addSubcommands(SubcommandData("increase", "Increase somebody's partnership count.")
+                .addOption(OptionType.USER, "member", "The member.", true)
+                .addOption(OptionType.INTEGER, "amount", "The amount to increase.", false))
+            .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
+    )
+}
+
+private suspend fun onExecute(event: SlashCommandInteractionEvent) {
+    if (event.name != "partnerships")
+        return
+
+    val guild = event.guild!!
+    val config = getGuild(guild).modules.partnerships
+
+    if (!config.enabled)
+        return event.interaction.reply("The partnerships module is not enabled/configured.").queue()
+
+    val member = event.getOption("member")!!.asMember!!
+    val amount = event.getOption("amount")?.asInt ?: 1
+
+    val memberData = getMember(member)
+    memberData.partnerships += amount
+    editMember(memberData)
+    event.interaction.reply("${member.asMention}'s new partnership count is **${memberData.partnerships}** (previously was **${memberData.partnerships - amount}**.)")
+        .setEphemeral(true)
+        .queue()
+}
 
 private suspend fun onMessage(event: MessageReceivedEvent) {
     if (!event.isFromGuild || event.message.author.isBot)
