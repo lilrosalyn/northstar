@@ -3,6 +3,7 @@ package dev.rosalyn.northstar.schema
 import dev.rosalyn.northstar.feature.AutoRoles
 import dev.rosalyn.northstar.feature.Lock
 import dev.rosalyn.northstar.feature.Partnerships
+import dev.rosalyn.northstar.feature.Punishments
 import dev.rosalyn.northstar.feature.ReactionRoles
 import dev.rosalyn.northstar.feature.Roleplay
 import dev.rosalyn.northstar.feature.Verification
@@ -45,7 +46,8 @@ data class Guild(
         @SerialName("WelcomeKt") val welcome: Welcome = Welcome(false),
         @SerialName("VerificationKt") val verification: Verification = Verification(false),
         @SerialName("AutoRolesKt") val autoRoles: AutoRoles = AutoRoles(false),
-        @SerialName("ReactionRolesKt") val reactionRoles: ReactionRoles = ReactionRoles(false)
+        @SerialName("ReactionRolesKt") val reactionRoles: ReactionRoles = ReactionRoles(false),
+        @SerialName("PunishmentsKt") val punishments: Punishments = Punishments(false)
     )
 
     constructor(resultRow: ResultRow) : this(

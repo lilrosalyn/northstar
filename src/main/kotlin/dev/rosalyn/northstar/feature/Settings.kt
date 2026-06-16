@@ -45,6 +45,9 @@ import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
+import net.dv8tion.jda.api.entities.Guild as JDAGuild
+
+private const val masterGuildId = 1503118575211122840L
 
 enum class SettingsStage {
     Root,
@@ -67,9 +70,13 @@ private suspend fun onCommand(event: SlashCommandInteractionEvent) {
 
     val interaction = event.interaction
     val module = interaction.getOption("module")?.asString
+    val guild = event.guild!!
 
     if (module != null) {
-        val module = commando.parsedNodes.find { module in ((it.node as? FeatureBase)?.name ?: "") }?.node as? FeatureBase
+        val module = commando.parsedNodes.find {
+            val node = it.node as? FeatureBase ?: return@find false
+            module in node.name && (!node.context.customModule || guild.idLong == masterGuildId)
+        }?.node as? FeatureBase
             ?: return interaction.reply("An error occurred. I couldn't find the module.")
                 .setEphemeral(true)
                 .queue()
@@ -80,13 +87,13 @@ private suspend fun onCommand(event: SlashCommandInteractionEvent) {
             .queue()
     }
 
-    interaction.replyComponents(configureModules())
+    interaction.replyComponents(configureModules(guild))
         .setEphemeral(true)
         .useComponentsV2()
         .queue()
 }
 
-private fun configureModules(): Container {
+private fun configureModules(guild: JDAGuild): Container {
     return makeContainer {
         textDisplay("""
             ### Modules
@@ -96,7 +103,7 @@ private fun configureModules(): Container {
         actionRow {
             val modules = commando.parsedNodes.map { it.node }
                 .filterIsInstance<FeatureBase>()
-                .filter { it.context.toggleable || it.moduleConfig != null }
+                .filter { (it.context.toggleable || it.moduleConfig != null) && (!it.context.customModule || guild.idLong == masterGuildId) }
                 .map { SelectOption.of(it.name, it.identifier) }
 
             stringSelect(
@@ -136,7 +143,7 @@ private suspend fun configureModule(interaction: Interaction, module: FeatureBas
 
         actionRow {
             button(ButtonStyle.SECONDARY, "Back") {
-                editComponents(configureModules()).useComponentsV2().queue()
+                editComponents(configureModules(interaction.guild!!)).useComponentsV2().queue()
             }
 
             if (context.toggleable && settings != null) {

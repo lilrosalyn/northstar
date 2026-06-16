@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.Event
 import net.dv8tion.jda.api.events.GenericEvent
+import net.dv8tion.jda.api.events.session.ReadyEvent
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.interactions.Interaction
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
@@ -49,7 +50,9 @@ class FeatureInitializer(
     name: String,
     val function: KFunction<List<CommandData>>,
     parent: FeatureBase
-) : Node<Feature>(commando, parent, name, parent.context)
+) : Node<Feature>(commando, parent, name, parent.context) {
+    val isGlobal = (function.parameters[0].type.classifier as KClass<*>) == ReadyEvent::class
+}
 
 class FeatureSettingsHook(
     commando: Commando,
@@ -131,7 +134,8 @@ class FeatureInteractionType(val commando: Commando, val jda: JDA) : Interaction
 
     override fun testFunction(parent: KClass<*>, handle: FunctionHandle): Result<Nothing?> {
         if (handle.name == "initializeModule") {
-            val parameters = handle.parameters.size == 1 && GuildInitializeEvent::class.java.isAssignableFrom(handle.parameters[0].first.type)
+            val parameters = handle.parameters.size == 1 && (GuildInitializeEvent::class.java.isAssignableFrom(handle.parameters[0].first.type)
+                    || ReadyEvent::class.java.isAssignableFrom(handle.parameters[0].first.type))
 
             if (!parameters)
                 return Result.failure(IllegalArgumentException("Bad parameters"))

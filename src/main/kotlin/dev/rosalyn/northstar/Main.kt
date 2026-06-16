@@ -60,7 +60,7 @@ fun main() {
 
             for (parseResult in commando.parsedNodes) {
                 val root = parseResult.node as? FeatureBase
-                val initializingNode = root?.children?.find { it is FeatureInitializer } as FeatureInitializer?
+                val initializingNode = root?.children?.find { it is FeatureInitializer && !it.isGlobal } as FeatureInitializer?
                     ?: continue
 
                 initializingNode.function.isAccessible = true

@@ -63,3 +63,7 @@ message.name = "Message"
 message.description = "A message sent alongside the role list."
 roles.name = "Roles"
 roles.description = "A list of roles that people can assign themselves."
+
+[modules.punishments]
+message.name = "Message"
+message.description = "The message sent to a user when they're banned."
