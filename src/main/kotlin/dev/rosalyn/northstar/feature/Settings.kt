@@ -10,6 +10,7 @@ import dev.rosalyn.northstar.commando
 import dev.rosalyn.northstar.event.GuildInitializeEvent
 import dev.rosalyn.northstar.config.EmbedConfig
 import dev.rosalyn.northstar.config.MessageConfig
+import dev.rosalyn.northstar.config.configToml
 import dev.rosalyn.northstar.lib.component.makeActionRow
 import dev.rosalyn.northstar.lib.component.makeContainer
 import dev.rosalyn.northstar.lib.component.makeModal
@@ -47,8 +48,6 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 
-private const val masterGuildId = 1394724298836545648L
-
 enum class SettingsStage {
     Root,
     AfterButtons,
@@ -75,7 +74,7 @@ private suspend fun onCommand(event: SlashCommandInteractionEvent) {
     if (module != null) {
         val module = commando.parsedNodes.find {
             val node = it.node as? FeatureBase ?: return@find false
-            module in node.name && (!node.context.customModule || guild.idLong == masterGuildId)
+            module in node.name && (!node.context.customModule || guild.idLong == configToml.masterGuildId)
         }?.node as? FeatureBase
             ?: return interaction.reply("An error occurred. I couldn't find the module.")
                 .setEphemeral(true)
@@ -103,7 +102,7 @@ private fun configureModules(guild: JDAGuild): Container {
         actionRow {
             val modules = commando.parsedNodes.map { it.node }
                 .filterIsInstance<FeatureBase>()
-                .filter { (it.context.toggleable || it.moduleConfig != null) && (!it.context.customModule || guild.idLong == masterGuildId) }
+                .filter { (it.context.toggleable || it.moduleConfig != null) && (!it.context.customModule || guild.idLong == configToml.masterGuildId) }
                 .map { SelectOption.of(it.name, it.identifier) }
 
             stringSelect(

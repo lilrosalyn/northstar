@@ -11,7 +11,8 @@ lateinit var configToml: ConfigToml; private set
 
 data class ConfigToml(
     val token: String,
-    val postgresUrl: String
+    val postgresUrl: String,
+    val masterGuildId: Long
 )
 
 fun loadConfigToml() {
