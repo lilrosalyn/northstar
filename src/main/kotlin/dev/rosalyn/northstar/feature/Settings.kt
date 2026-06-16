@@ -47,7 +47,7 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 
-private const val masterGuildId = 1503118575211122840L
+private const val masterGuildId = 1394724298836545648L
 
 enum class SettingsStage {
     Root,
