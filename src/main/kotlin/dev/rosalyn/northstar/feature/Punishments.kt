@@ -33,7 +33,7 @@ data class Punishments(
 
 private fun initializeModule(event: GuildInitializeEvent): List<CommandData> {
     return listOf(
-        Commands.slash("ban", "Ban a user.")
+        Commands.slash("vaban", "Ban a user.")
             .addOption(OptionType.USER, "user", "The user to ban.", true)
             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
     )
@@ -42,7 +42,7 @@ private fun initializeModule(event: GuildInitializeEvent): List<CommandData> {
 private val moduleConfig = Punishments::class
 
 private suspend fun onExecute(event: SlashCommandInteractionEvent) = withContext(Dispatchers.IO) {
-    if (event.name != "ban")
+    if (event.name != "vaban")
         return@withContext
 
     val guild = event.guild!!
