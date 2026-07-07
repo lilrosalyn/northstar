@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
@@ -52,26 +53,28 @@ fun main() {
 
     jda.awaitReady()
 
-    for (guild in jda.guilds) {
-        val commands = mutableListOf<CommandData>()
-
+    for (guild in jda.guilds)
         scope.launch {
-            val event = GuildInitializeEvent(guild, false)
-
-            for (parseResult in commando.parsedNodes) {
-                val root = parseResult.node as? FeatureBase
-                val initializingNode = root?.children?.find { it is FeatureInitializer && !it.isGlobal } as FeatureInitializer?
-                    ?: continue
-
-                initializingNode.function.isAccessible = true
-                commands += initializingNode.function.call(event)
-            }
-
-            guild.updateCommands()
-                .addCommands(commands)
-                .queue()
+            initializeGuild(guild)
         }
-    }
 
     logger.info("Northstar is ready.")
+}
+
+fun initializeGuild(guild: Guild) {
+    val commands = mutableListOf<CommandData>()
+    val event = GuildInitializeEvent(guild, false)
+
+    for (parseResult in commando.parsedNodes) {
+        val root = parseResult.node as? FeatureBase
+        val initializingNode = root?.children?.find { it is FeatureInitializer && !it.isGlobal } as FeatureInitializer?
+            ?: continue
+
+        initializingNode.function.isAccessible = true
+        commands += initializingNode.function.call(event)
+    }
+
+    guild.updateCommands()
+        .addCommands(commands)
+        .queue()
 }

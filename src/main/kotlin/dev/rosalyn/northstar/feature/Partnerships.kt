@@ -86,7 +86,7 @@ private suspend fun onMessage(event: MessageReceivedEvent) {
     for (profile in config.profiles.sortedBy { if (it.trigger == null || it.trigger!! == "") 1 else 0 }) {
         val message = event.message
 
-        if (channel != profile.channel || (profile.trigger != null && profile.trigger!! !in message.contentRaw)
+        if (channel.idLong != profile.channel?.id || (profile.trigger != null && profile.trigger!! !in message.contentRaw)
             || profile.message?.isValidForUse() != true)
             continue
 

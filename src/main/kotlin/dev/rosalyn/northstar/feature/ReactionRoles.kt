@@ -3,6 +3,7 @@
 package dev.rosalyn.northstar.feature
 
 import dev.rosalyn.northstar.ModuleSettings
+import dev.rosalyn.northstar.RolePartial
 import dev.rosalyn.northstar.SerializableRole
 import dev.rosalyn.northstar.lib.component.ContainerBuilder
 import dev.rosalyn.northstar.config.MessageConfig
@@ -94,11 +95,12 @@ private suspend fun onButton(event: ButtonInteractionEvent) {
     event.replyComponents(
         makeTextDisplay("Please pick your roles."),
         makeActionRow {
-            val priorSelectedRoles = settings.roles.filter { it in event.member!!.roles }
+            val mappedRoles = settings.roles.mapNotNull { it.get() }
+            val priorSelectedRoles = mappedRoles.filter { it in event.member!!.roles }
 
             stringSelect(
-                settings.roles.map { SelectOption.of(it.name, it.id) },
-                defaultValues = priorSelectedRoles.map(Role::getId),
+                mappedRoles.map { SelectOption.of(it.name, it.id) },
+                defaultValues = priorSelectedRoles.map { it.id },
                 requiredRange = 1..25
             ) {
                 val selectedRoles = values.mapNotNull { guild.getRoleById(it) }

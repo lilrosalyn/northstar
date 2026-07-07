@@ -4,6 +4,7 @@ import dev.rosalyn.northstar.scope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
+import kotlin.time.Duration.Companion.milliseconds
 
 const val defaultCachePeriod = 1000L * 60 * 60 * 3
 
@@ -15,7 +16,7 @@ class CacheWithPeriod<K : Any, V : Any>(
     init {
         scope.launch {
             while (true) {
-                delay(expiryPeriod)
+                delay(expiryPeriod.milliseconds)
                 cache.clear()
             }
         }

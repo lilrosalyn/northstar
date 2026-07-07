@@ -23,6 +23,10 @@ private suspend fun onJoin(event: GuildMemberJoinEvent) {
     if (!settings.enabled)
         return
 
-    guild.modifyMemberRoles(event.member, settings.roles, emptyList()).queue()
+    guild.modifyMemberRoles(
+        event.member,
+        settings.roles.mapNotNull { it.get() },
+        emptyList()
+    ).queue()
 }
 

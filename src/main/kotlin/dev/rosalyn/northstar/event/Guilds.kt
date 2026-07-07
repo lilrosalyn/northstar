@@ -2,6 +2,7 @@
 
 package dev.rosalyn.northstar.event
 
+import dev.rosalyn.northstar.initializeGuild
 import dev.rosalyn.northstar.jda
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.Event
@@ -15,8 +16,7 @@ class GuildInitializeEvent(val guild: Guild, val isNewGuild: Boolean) : Event(jd
 class GuildCleanupEvent(val guild: Guild) : Event(jda)
 
 private fun onGuildAdd(event: GuildJoinEvent) {
-    val event = GuildInitializeEvent(event.guild, true)
-    jda.eventManager.handle(event)
+    initializeGuild(event.guild)
 }
 
 private fun onGuildRemove(event: GuildLeaveEvent) {

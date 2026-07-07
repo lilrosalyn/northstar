@@ -29,7 +29,7 @@ data class Welcome(
     var channel: SerializableChannel? = null,
     var message: MessageConfig? = null
 ) : ModuleSettings {
-    fun isValidForUse() = channel != null && message != null
+    fun isValidForUse() = channel?.fetch() != null && message != null
 }
 
 private val moduleConfig = Welcome::class
@@ -74,7 +74,7 @@ private suspend fun onMemberJoin(event: GuildMemberJoinEvent) {
     memberCounts[guild] = count
 
     val embed = guild.generateWelcomeEmbed(event.member)
-    (settings.channel!! as TextChannel).sendMessage(embed).queue()
+    (settings.channel!!.get() as? TextChannel)?.sendMessage(embed)?.queue()
 }
 
 private fun onMemberLeave(event: GuildMemberRemoveEvent) {

@@ -72,7 +72,7 @@ private suspend fun onChat(event: MessageReceivedEvent) {
     val channel = event.channel as? GuildChannel ?: return
     val config = getGuild(event.guild).modules.roleplay
 
-    if (!config.enabled || (config.channels.isNotEmpty() && channel !in config.channels))
+    if (!config.enabled || (config.channels.isNotEmpty() && config.channels.none { it.id == channel.idLong }))
         return
 
     val parent = if (channel is ThreadChannel)

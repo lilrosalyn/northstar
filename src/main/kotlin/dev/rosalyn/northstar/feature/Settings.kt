@@ -3,7 +3,9 @@
 
 package dev.rosalyn.northstar.feature
 
+import dev.rosalyn.northstar.GuildChannelPartial
 import dev.rosalyn.northstar.ModuleSettings
+import dev.rosalyn.northstar.RolePartial
 import dev.rosalyn.northstar.SerializableChannel
 import dev.rosalyn.northstar.SerializableRole
 import dev.rosalyn.northstar.commando
@@ -206,18 +208,18 @@ private fun generateProperties(
                 val innerType = property.returnType.arguments[0].type!!.classifier as KClass<*>
 
                 when (innerType) {
-                    GuildChannel::class -> {
+                    GuildChannelPartial::class -> {
                         value as MutableList<SerializableChannel>
                         textDisplay("**$displayName**\n-# $description")
 
                         actionRow {
                             entitySelect(
                                 SelectTarget.CHANNEL,
-                                defaultValues = value.map { EntitySelectMenu.DefaultValue.channel(it.idLong) },
+                                defaultValues = value.map { EntitySelectMenu.DefaultValue.channel(it.id) },
                                 requiredRange = 0..25
                             ) {
                                 value.clear()
-                                value.addAll(values.mapNotNull { it as? GuildChannel })
+                                value.addAll(values.mapNotNull { (it as? GuildChannel)?.idLong?.let(::GuildChannelPartial) })
 
                                 reply("The list of channels has been updated.")
                                     .setEphemeral(true).queue()
@@ -226,18 +228,18 @@ private fun generateProperties(
                             }
                         }
                     }
-                    Role::class -> {
+                    RolePartial::class -> {
                         value as MutableList<SerializableRole>
                         textDisplay("**$displayName**\n-# $description")
 
                         actionRow {
                             entitySelect(
                                 SelectTarget.ROLE,
-                                defaultValues = value.map { EntitySelectMenu.DefaultValue.role(it.idLong) },
+                                defaultValues = value.map { EntitySelectMenu.DefaultValue.role(it.id) },
                                 requiredRange = 0..25
                             ) {
                                 value.clear()
-                                value.addAll(values.map { it as Role })
+                                value.addAll(values.map { (it as Role).idLong.let(::RolePartial) })
 
                                 reply("The list of roles has been updated.")
                                     .setEphemeral(true).queue()
@@ -353,20 +355,20 @@ private fun generateProperties(
                                 )
                             }).queue()
                         }
-                        GuildChannel::class -> {
-                            value as GuildChannel?
+                        GuildChannelPartial::class -> {
+                            value as GuildChannelPartial?
 
                             replyComponents(
                                 makeTextDisplay("Select a new channel."),
                                 makeActionRow {
                                     entitySelect(
                                         SelectTarget.CHANNEL,
-                                        defaultValues = value?.let { listOf(EntitySelectMenu.DefaultValue.channel(it.idLong)) }
+                                        defaultValues = value?.let { listOf(EntitySelectMenu.DefaultValue.channel(it.id)) }
                                             ?: emptyList(),
                                         requiredRange = 1..1
                                     ) {
                                         val newValue = values[0] as GuildChannel
-                                        property::set.call(settings, newValue)
+                                        property::set.call(settings, GuildChannelPartial(newValue.idLong))
                                         editComponents(
                                             makeTextDisplay("Done! The channel is now ${newValue.asMention}."),
                                             message.components[1]
@@ -376,20 +378,20 @@ private fun generateProperties(
                                 }
                             ).useComponentsV2().setEphemeral(true).queue()
                         }
-                        Role::class -> {
-                            value as Role?
+                        RolePartial::class -> {
+                            value as RolePartial?
 
                             replyComponents(
                                 makeTextDisplay("Select a new role."),
                                 makeActionRow {
                                     entitySelect(
                                         SelectTarget.ROLE,
-                                        defaultValues = value?.let { listOf(EntitySelectMenu.DefaultValue.role(it.idLong)) }
+                                        defaultValues = value?.let { listOf(EntitySelectMenu.DefaultValue.role(it.id)) }
                                             ?: emptyList(),
                                         requiredRange = 1..1
                                     ) {
                                         val newValue = values[0] as Role
-                                        property::set.call(settings, newValue)
+                                        property::set.call(settings, RolePartial(newValue.idLong))
                                         editComponents(
                                             makeTextDisplay("Done! The role is now ${newValue.asMention}."),
                                             message.components[1]

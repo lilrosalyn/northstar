@@ -22,7 +22,7 @@ data class Lock(
     var locked: MessageConfig? = null,
     var unlocked: MessageConfig? = null
 ) : ModuleSettings {
-    fun isValidForUse() = locked != null && unlocked != null && role != null
+    fun isValidForUse() = locked != null && unlocked != null && role?.fetch() != null
 }
 
 private val moduleConfig = Lock::class
@@ -45,7 +45,7 @@ private suspend fun onExecute(event: SlashCommandInteractionEvent) {
         return event.interaction.reply("The locking module is not enabled/configured.").queue()
 
     val channel = event.channel.asTextChannel()
-    val role = config.role!!
+    val role = config.role!!.get()!!
 
     try {
         val roleOverwrite = channel.upsertPermissionOverride(role)

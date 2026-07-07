@@ -11,6 +11,8 @@ import dev.rosalyn.northstar.lib.component.makeModal
 import dev.rosalyn.northstar.lib.component.makeTextDisplay
 import dev.rosalyn.northstar.language.translate
 import dev.rosalyn.northstar.schema.getGuild
+import dev.rosalyn.northstar.scope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.components.buttons.Button
 import net.dv8tion.jda.api.components.buttons.ButtonStyle
@@ -33,7 +35,7 @@ data class Verification(
     var afterRoles: MutableList<SerializableRole> = mutableListOf()
 ) : ModuleSettings {
     fun isValidForUse() = code != null && message != null && verifiedMessage != null && wrongCodeMessage != null
-            && (beforeRoles.isNotEmpty() || afterRoles.isNotEmpty())
+            && ((beforeRoles.any { it.fetch() != null }) || afterRoles.any { it.fetch() != null })
 }
 
 private val moduleConfig = Verification::class
@@ -101,7 +103,11 @@ private suspend fun onButton(event: ButtonInteractionEvent) {
             val guild = guild!!
             val member = member!!
 
-            guild.modifyMemberRoles(member, settings.afterRoles, settings.beforeRoles).queue()
+            guild.modifyMemberRoles(
+                member,
+                settings.afterRoles.mapNotNull { it.get() },
+                settings.beforeRoles.mapNotNull { it.get() }
+            ).queue()
 
             reply(settings.verifiedMessage!!.toMessage())
                 .setEphemeral(true).queue()
@@ -114,5 +120,5 @@ private suspend fun onButton(event: ButtonInteractionEvent) {
 
 private suspend fun onJoin(event: GuildMemberJoinEvent) {
     val settings = getGuild(event.guild).modules.verification
-    event.guild.modifyMemberRoles(event.member, event.member.roles + settings.beforeRoles).queue()
+    event.guild.modifyMemberRoles(event.member, event.member.roles + settings.beforeRoles.mapNotNull { it.get() }).queue()
 }
