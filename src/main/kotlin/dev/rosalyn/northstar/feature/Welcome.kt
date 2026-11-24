@@ -12,7 +12,7 @@ import dev.rosalyn.northstar.schema.getGuild
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
@@ -27,9 +27,10 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData
 data class Welcome(
     override var enabled: Boolean = false,
     var channel: SerializableChannel? = null,
-    var message: MessageConfig? = null
+    var message: MessageConfig? = null,
+    var leaveMessage: MessageConfig? = null
 ) : ModuleSettings {
-    fun isValidForUse() = channel?.fetch() != null && message != null
+    fun isValidForUse() = channel?.fetch() != null && (message != null || leaveMessage != null)
 }
 
 private val moduleConfig = Welcome::class
@@ -42,20 +43,24 @@ private fun initializeModule(event: GuildInitializeEvent): List<CommandData> {
     return listOf(
         Commands.slash("welcome", "Test the welcome embed.")
             .addOption(OptionType.USER, "user", "The user.")
+            .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS)),
+        Commands.slash("goodbye", "Test the goodbye embed.")
+            .addOption(OptionType.USER, "user", "The user.")
             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
     )
 }
 
 private suspend fun onExecute(event: SlashCommandInteractionEvent) {
-    if (event.name != "welcome")
+    if (event.name != "welcome" && event.name != "goodbye")
         return
 
     val config = getGuild(event.guild!!).modules.welcome
+    val message = if (event.name == "welcome") config.message else config.leaveMessage
 
-    if (!config.enabled || !config.isValidForUse())
+    if (!config.enabled || !config.isValidForUse() || message == null)
         return event.interaction.reply("The welcome module is not configured.").queue()
 
-    val embed = event.guild!!.generateWelcomeEmbed(event.member!!)
+    val embed = event.guild!!.generateWelcomeEmbed(event.user, message)
     event.reply(embed).queue()
 }
 
@@ -73,26 +78,37 @@ private suspend fun onMemberJoin(event: GuildMemberJoinEvent) {
     val count = memberCounts[guild]?.plus(1) ?: guild.memberCount
     memberCounts[guild] = count
 
-    val embed = guild.generateWelcomeEmbed(event.member)
-    (settings.channel!!.get() as? TextChannel)?.sendMessage(embed)?.queue()
+    if (settings.message != null) {
+        val embed = guild.generateWelcomeEmbed(event.user, settings.message!!)
+        (settings.channel!!.get() as? TextChannel)?.sendMessage(embed)?.queue()
+    }
 }
 
-private fun onMemberLeave(event: GuildMemberRemoveEvent) {
+private suspend fun onMemberLeave(event: GuildMemberRemoveEvent) {
     val guild = event.guild
+    val settings = getGuild(guild).modules.welcome
+
+    if (!settings.isValidForUse())
+        return
+
     val count = memberCounts[guild]?.minus(1) ?: guild.memberCount
     memberCounts[guild] = count
+
+    if (settings.leaveMessage != null) {
+        val embed = guild.generateWelcomeEmbed(event.user, settings.leaveMessage!!)
+        (settings.channel!!.get() as? TextChannel)?.sendMessage(embed)?.queue()
+    }
 }
 
-suspend fun Guild.generateWelcomeEmbed(member: Member): MessageCreateData {
-    val settings = getGuild(this).modules.welcome
+fun Guild.generateWelcomeEmbed(user: User, message: MessageConfig): MessageCreateData {
     val placeholders = arrayOf(
-        "username" to member.effectiveName,
-        "mention" to member.asMention,
-        "age" to calculateAge(member.timeCreated.toEpochSecond()),
-        "profilePicture" to member.effectiveAvatarUrl,
+        "username" to user.effectiveName,
+        "mention" to user.asMention,
+        "age" to calculateAge(user.timeCreated.toEpochSecond()),
+        "profilePicture" to user.effectiveAvatarUrl,
         "memberCount" to (memberCounts[this] ?: 2).toString(),
         "serverName" to name
     )
 
-    return settings.message!!.toMessage(*placeholders)
+    return message.toMessage(*placeholders)
 }

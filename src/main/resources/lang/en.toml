@@ -1,8 +1,10 @@
 [modules.welcome]
 channel.name = "Channel"
 channel.description = "The channel where welcome messages are sent."
-message.name = "Message"
+message.name = "Join Message"
 message.description = "The message sent when a member joins the server."
+leaveMessage.name = "Leave Message"
+leaveMessage.description = "The message sent when a member leaves the server."
 
 [modules.lock]
 role.name = "Role"
