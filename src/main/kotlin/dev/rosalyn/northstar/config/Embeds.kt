@@ -16,6 +16,16 @@ data class EmbedConfig(
     var thumbnail: String? = null,
     var description: String? = null
 ) {
+    constructor(embed: MessageEmbed) : this(
+        embed.author?.let { ProfileField(it.iconUrl, it.name) },
+        embed.footer?.let { ProfileField(it.iconUrl, it.text) },
+        embed.title,
+        "#" + embed.color?.rgb?.toHexString()?.substring(2),
+        embed.image?.url,
+        embed.thumbnail?.url,
+        embed.description
+    )
+
     @Serializable
     data class ProfileField(
         var imageURL: String? = null,

@@ -182,7 +182,7 @@ private suspend fun configureModule(interaction: Interaction, module: FeatureBas
     }
 }
 
-private fun generateProperties(
+fun generateProperties(
     interaction: Interaction,
     module: FeatureBase,
     guildData: Guild,
@@ -203,9 +203,7 @@ private fun generateProperties(
                 continue
 
             val type = property.returnType.classifier as KClass<*>
-            println("Fetching value of property $name ($settingsRef). Expected type: $type. Settings: $settings")
             val value = property::get.call(settings)
-            println("Value: $value")
 
             val (displayName, description) = interaction.translate {
                 val module = modules[settingsRef.simpleName!!.lowercase()]!!
