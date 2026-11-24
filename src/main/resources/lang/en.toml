@@ -67,3 +67,17 @@ roles.description = "A list of roles that people can assign themselves."
 [modules.punishments]
 message.name = "Message"
 message.description = "The message sent to a user when they're banned."
+
+[modules.tickets]
+ticketMessage.name = "Ticket Message"
+ticketMessage.description = "The message people create tickets with."
+ticketCreationSuccess.name = "Creation Success"
+ticketCreationSuccess.description = "The message sent when a ticket is successfully created."
+profiles.name = "Profiles"
+profiles.description = "A list of different ticket profiles/types."
+
+[modules.ticketprofile]
+name.name = "Name"
+name.description = "The name of the ticket profile."
+messages.name = "Messages"
+messages.description = "A list of messages sent in a new ticket."

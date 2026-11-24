@@ -27,11 +27,11 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData
 
 @Serializable
 data class PartnershipsProfile(
-    val name: String,
+    override var name: String,
     var channel: SerializableChannel? = null,
     var trigger: String? = null,
     var message: MessageConfig? = null
-)
+) : Profile
 
 @Serializable
 data class Partnerships(

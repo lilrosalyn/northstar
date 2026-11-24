@@ -18,6 +18,7 @@ import dev.rosalyn.northstar.lib.component.makeContainer
 import dev.rosalyn.northstar.lib.component.makeModal
 import dev.rosalyn.northstar.lib.component.makeTextDisplay
 import dev.rosalyn.northstar.language.translate
+import dev.rosalyn.northstar.lib.component.ContainerBuilder
 import dev.rosalyn.northstar.schema.Guild
 import dev.rosalyn.northstar.schema.editGuild
 import dev.rosalyn.northstar.schema.getGuild
@@ -42,6 +43,7 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.Commands
+import net.dv8tion.jda.api.interactions.components.ComponentInteraction
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
@@ -55,6 +57,10 @@ enum class SettingsStage {
     AfterButtons,
     BeforeSettings,
     AfterSettings
+}
+
+interface Profile {
+    var name: String
 }
 
 private fun initializeModule(event: GuildInitializeEvent): List<CommandData> {
@@ -76,7 +82,7 @@ private suspend fun onCommand(event: SlashCommandInteractionEvent) {
     if (module != null) {
         val module = commando.parsedNodes.find {
             val node = it.node as? FeatureBase ?: return@find false
-            module in node.name && (!node.context.customModule || guild.idLong == configToml.masterGuildId)
+            module.lowercase() in node.name.lowercase() && (!node.context.customModule || guild.idLong == configToml.masterGuildId)
         }?.node as? FeatureBase
             ?: return interaction.reply("An error occurred. I couldn't find the module.")
                 .setEphemeral(true)
@@ -197,7 +203,9 @@ private fun generateProperties(
                 continue
 
             val type = property.returnType.classifier as KClass<*>
+            println("Fetching value of property $name ($settingsRef). Expected type: $type. Settings: $settings")
             val value = property::get.call(settings)
+            println("Value: $value")
 
             val (displayName, description) = interaction.translate {
                 val module = modules[settingsRef.simpleName!!.lowercase()]!!
@@ -248,8 +256,67 @@ private fun generateProperties(
                             }
                         }
                     }
-                    PartnershipsProfile::class -> {
-                        value as MutableList<PartnershipsProfile>
+                    MessageConfig::class -> {
+                        value as MutableList<MessageConfig>
+
+                        var page = 0
+                        var render: ContainerBuilder.() -> Unit = {}
+
+                        fun ComponentInteraction.refresh() {
+                            val base = message.components[0].asContainer().components
+                            editComponents(makeContainer {
+                                children.addAll(base.slice(0..3))
+                                render()
+                            }).useComponentsV2().queue()
+                        }
+
+                        render = {
+                            actionRow {
+                                button(ButtonStyle.SECONDARY, "<<", disabled = page <= 0) {
+                                    page = 1
+                                    refresh()
+                                }
+                                button(ButtonStyle.SECONDARY, "<", disabled = page <= 0) {
+                                    page--
+                                    refresh()
+                                }
+                                button(ButtonStyle.SECONDARY, "${page + 1}/${value.size}", disabled = true)
+                                button(ButtonStyle.SECONDARY, ">", disabled = page + 1 >= value.size) {
+                                    page++
+                                    refresh()
+                                }
+                                button(ButtonStyle.SECONDARY, ">>", disabled = page + 1 >= value.size) {
+                                    page = value.size - 1
+                                    refresh()
+                                }
+                            }
+
+                            children += generateProperties(
+                                interaction,
+                                module,
+                                guildData,
+                                MessageConfig::class,
+                                value[page]
+                            )
+                        }
+
+                        section {
+                            textDisplay("**$displayName**\n-# $description")
+                            buttonAccessory(ButtonStyle.PRIMARY, "New") {
+                                value += MessageConfig()
+                                page = value.size - 1
+                                refresh()
+                                editGuild(guildData)
+                            }
+                        }
+
+                        if (value.isNotEmpty()) {
+                            render()
+                        }
+                    }
+                    PartnershipsProfile::class, TicketProfile::class -> {
+                        value as MutableList<Profile>
+                        val isTicketProfile = innerType == TicketProfile::class
                         textDisplay("**$displayName**\n-# $description")
 
                         val uuidMap = mapOf(*value.map { UUID.randomUUID() to it }.toTypedArray())
@@ -270,7 +337,7 @@ private fun generateProperties(
                                 if (option == "create_new_profile") {
                                     replyModal(makeModal("Create New Profile", onSubmit = {
                                         val name = getValue("name")!!.asString
-                                        val profile = PartnershipsProfile(name)
+                                        val profile = if (isTicketProfile) TicketProfile(name) else PartnershipsProfile(name)
                                         value.add(profile)
 
                                         editGuild(guildData)
@@ -297,7 +364,7 @@ private fun generateProperties(
                                             You may configure the settings of the profile here.
                                         """.trimIndent())
                                         separator(true, Separator.Spacing.SMALL)
-                                        children += generateProperties(interaction, module, guildData, PartnershipsProfile::class, profile)
+                                        children += generateProperties(interaction, module, guildData, innerType, profile)
                                     },
                                     makeActionRow {
                                         button(ButtonStyle.DANGER, "Delete Profile") {
