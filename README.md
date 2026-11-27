@@ -9,6 +9,8 @@ to be revised in the future. she's a mess
 
 - [ ] a punishment system!
   - one is vaguely implemented in the bot, but it's custom made for the host server and very bare.
+- [ ] reduce crashes and add error reporting.
+  - [ ] when the bot has no permissions to do something!
 - [ ] better settings documentation (ie placeholders)
   - a site would be awesome for this, though i admittedly am not great at web dev...
 - [ ] general polish for UX.
