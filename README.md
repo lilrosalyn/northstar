@@ -14,5 +14,5 @@ to be revised in the future. she's a mess
 - [ ] better settings documentation (ie placeholders)
   - a site would be awesome for this, though i admittedly am not great at web dev...
 - [ ] general polish for UX.
-  - [ ] send a message to bot admin or channel when bot is added. give introduction, show where info can be found, how to configure bot, etc.
+  - [x] send a message to bot admin or channel when bot is added. give introduction, show where info can be found, how to configure bot, etc.
   - [ ] add more "obvious" missing features (ex. we had a welcome feature but no goodbye feature...). not sure what these would be
