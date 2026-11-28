@@ -1,3 +1,0 @@
-todo:
-- tickets
-- send embeds

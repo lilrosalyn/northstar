@@ -1,7 +1,7 @@
 import org.gradle.kotlin.dsl.register
 
 plugins {
-    kotlin("jvm") version "2.3.0"
+    kotlin("jvm") version "2.4.21"
     kotlin("plugin.serialization") version "2.3.0"
     id("com.gradleup.shadow") version "9.3.1"
 }
@@ -57,4 +57,8 @@ tasks.shadowJar {
 
 kotlin {
     jvmToolchain(21)
+
+    compilerOptions {
+        freeCompilerArgs.add("-XXLanguage:+FullValueClasses")
+    }
 }

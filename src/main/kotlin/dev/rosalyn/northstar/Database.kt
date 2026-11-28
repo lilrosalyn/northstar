@@ -19,7 +19,7 @@ fun connectDatabase() {
     )
 
     transaction {
-        SchemaUtils.create(RoleplayProfiles, RoleplayMessages, Guilds, Members)
+        SchemaUtils.createMissingTablesAndColumns(RoleplayProfiles, RoleplayMessages, Guilds, Members)
     }
 
     logger.info("Database initialized.")

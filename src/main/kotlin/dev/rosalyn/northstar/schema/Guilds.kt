@@ -36,8 +36,7 @@ object Guilds : Table() {
 @Serializable
 data class Guild(
     val id: Long,
-    var modules: Modules,
-    val partnerships: Map<Long, Int>? = null
+    var modules: Modules
 ) {
     @Serializable
     data class Modules(
@@ -49,8 +48,14 @@ data class Guild(
         @SerialName("AutoRolesKt") val autoRoles: AutoRoles = AutoRoles(false),
         @SerialName("ReactionRolesKt") val reactionRoles: ReactionRoles = ReactionRoles(false),
         @SerialName("PunishmentsKt") val punishments: Punishments = Punishments(false),
-        @SerialName("TicketsKt") val tickets: Tickets = Tickets(false)
-    )
+        @SerialName("TicketsKt") val tickets: Tickets = Tickets(false),
+        val extra: Extra = Extra()
+    ) {
+        @Serializable
+        data class Extra(
+            var sentInformation: Boolean = false
+        )
+    }
 
     constructor(resultRow: ResultRow) : this(
         resultRow[Guilds.id],

@@ -15,7 +15,7 @@ class GuildInitializeEvent(val guild: Guild, val isNewGuild: Boolean) : Event(jd
 
 class GuildCleanupEvent(val guild: Guild) : Event(jda)
 
-private fun onGuildAdd(event: GuildJoinEvent) {
+private suspend fun onGuildAdd(event: GuildJoinEvent) {
     initializeGuild(event.guild)
 }
 

@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.reflect.full.callSuspend
 import kotlin.reflect.jvm.isAccessible
 
 val logger: Logger = LoggerFactory.getLogger("Northstar")
@@ -61,7 +62,7 @@ fun main() {
     logger.info("Northstar is ready.")
 }
 
-fun initializeGuild(guild: Guild) {
+suspend fun initializeGuild(guild: Guild) {
     val commands = mutableListOf<CommandData>()
     val event = GuildInitializeEvent(guild, false)
 
@@ -71,7 +72,7 @@ fun initializeGuild(guild: Guild) {
             ?: continue
 
         initializingNode.function.isAccessible = true
-        commands += initializingNode.function.call(event)
+        commands += initializingNode.function.callSuspend(event)
     }
 
     guild.updateCommands()

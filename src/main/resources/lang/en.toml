@@ -1,3 +1,17 @@
+[about]
+info = """
+Hello! Northstar is a general purpose bot designed to facilitate server management.
+
+It's still a work in progress, so some features may not work as you might expect.
+If you encounter any issues, please file an issue on our [Github repository]({github}/issues).
+
+If you're curious about the bot, feel free to press the buttons below to see more information.
+"""
+adminsOnly = "Only server administrators can do that."
+configuration = "Configuration"
+discord = "Discord"
+github = "GitHub"
+
 [modules.welcome]
 channel.name = "Channel"
 channel.description = "The channel where welcome messages are sent."

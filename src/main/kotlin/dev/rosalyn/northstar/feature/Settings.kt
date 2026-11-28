@@ -100,7 +100,7 @@ private suspend fun onCommand(event: SlashCommandInteractionEvent) {
         .queue()
 }
 
-private fun configureModules(guild: JDAGuild): Container {
+fun configureModules(guild: JDAGuild): Container {
     return makeContainer {
         textDisplay("""
             ### Modules
